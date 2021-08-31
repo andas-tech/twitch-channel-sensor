@@ -1,5 +1,5 @@
 {
-  "name": "twitch-chatbot",
+  "name": "@andas/twitch-channel-sensor",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
