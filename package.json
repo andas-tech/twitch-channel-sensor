@@ -22,6 +22,8 @@
   "homepage": "https://github.com/andas-tech/twitch-chatbot#readme",
   "dependencies": {
     "@tsconfig/node16": "^1.0.2",
+    "@twurple/auth": "^5.0.4",
+    "@twurple/chat": "^5.0.4",
     "dotenv": "^10.0.0",
     "kafka-node": "^5.0.0",
     "pino": "^7.0.0-rc.3",
