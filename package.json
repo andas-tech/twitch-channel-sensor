@@ -1,0 +1,43 @@
+{
+  "name": "@andas/twitch-channel-sensor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/main.js",
+    "build": "tsc -p .",
+    "buildrun": "tsc -p . && npm start",
+    "dev": "ts-node-dev --respawn --transpile-only src/*.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andas-tech/twitch-chatbot.git"
+  },
+  "author": "nicseltzer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andas-tech/twitch-chatbot/issues"
+  },
+  "homepage": "https://github.com/andas-tech/twitch-chatbot#readme",
+  "dependencies": {
+    "@andas/streaming-events": "github:andas-tech/streaming-event-streaming",
+    "@tsconfig/node16": "^1.0.2",
+    "@twurple/auth": "^5.0.4",
+    "@twurple/chat": "^5.0.4",
+    "dotenv": "^10.0.0",
+    "kafka-node": "^5.0.0",
+    "pino": "^7.0.0-rc.3",
+    "typescript": "^4.3.5"
+  },
+  "devDependencies": {
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react-hooks": "^1.7.0",
+    "ts-node-dev": "^1.1.8"
+  }
+}
