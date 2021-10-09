@@ -8,7 +8,7 @@ dotenv.config() // Read .env file into Environment Variables (process.env...)
 const main = () => {
     const logger = createLogger("TwitchChannelSensor")
 
-    const botClient = TwitchClientFactory.get()
+    const botClient = TwitchClientFactory.getBotClient()
     botClient.connect().then(() => {
         logger.info(`client connected`)
         botClient.onRegister(() => {
@@ -16,6 +16,8 @@ const main = () => {
             MessageEvents.register(botClient)
         })
     }).catch((err) => logger.error(err))
+
+    const apiClient = TwitchClientFactory.getApiClient()
 }
 
 main()

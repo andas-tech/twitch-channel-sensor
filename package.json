@@ -23,6 +23,7 @@
   "dependencies": {
     "@andas/streaming-events": "github:andas-tech/streaming-event-streaming",
     "@tsconfig/node16": "^1.0.2",
+    "@twurple/api": "^5.0.5",
     "@twurple/auth": "^5.0.4",
     "@twurple/chat": "^5.0.4",
     "@twurple/eventsub": "^5.0.5",
