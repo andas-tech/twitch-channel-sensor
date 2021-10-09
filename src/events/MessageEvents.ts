@@ -1,20 +1,14 @@
-import {TwitchEventListener} from "../domain/TwitchEventListener";
-
+import {ChatClient} from "@twurple/chat";
+import {createLogger} from "../commons/Logger";
 import {ingestMessage} from "../services/StreamingEventStreamingClient";
 
-module.exports = [
-    {
-        target: "onMessage",
-        execute(message: Message): void {
-            ingestMessage(message, "messageCreate")
-        }
-    },
-    {
-        target: "onSub",
-        execute(message: Presence): void {
-            ingestMessage(message)
-        }
+const logger = createLogger("MessageEvents")
+
+export class MessageEvents{
+    public static register(client: ChatClient): void {
+        client.onMessage(async (channel, user, message, messageObj) => {
+            logger.trace(`${user}@${channel} -> ${message}`)
+            ingestMessage(messageObj)
+        })
     }
-
-
-] as TwitchEventListener[]
+}

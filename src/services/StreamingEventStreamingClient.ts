@@ -1,36 +1,17 @@
-/*
-
-Streaming Event Streaming service --
-a kafka integration for discord messages
- */
-
 import {createLogger} from "../commons/Logger";
 import {KafkaClient, Producer} from "kafka-node";
-import {MESSAGE_CREATE, MESSAGE_UPDATE} from "../constants";
-import {DiscordKafkaTopics} from "@andas/streaming-events/dist/Discord";
+import {TwitchPrivateMessage} from "@twurple/chat/lib/commands/TwitchPrivateMessage";
+import {TwitchKafkaTopics} from "@andas/streaming-events/dist/Twitch";
+
 
 
 const logger = createLogger("StreamingEventStreamingClient")
 const kafkaHost = process.env.KAFKA_HOST
 
-type ValidTypes = Message | Presence
+type ValidTypes = TwitchPrivateMessage
 
-export const ingestMessage = (message: ValidTypes, nuance?: string) => {
-    if (message instanceof Message) {
-        if (nuance === MESSAGE_CREATE) {
-            publish(DiscordKafkaTopics.KAFKA_TOPIC_DISCORD_MESSAGE_CREATE, JSON.stringify(message))
-            return
-        }
-        if (nuance === MESSAGE_UPDATE) {
-            publish(DiscordKafkaTopics.KAFKA_TOPIC_DISCORD_MESSAGE_UPDATE, JSON.stringify(message))
-            return
-        }
-        publish(DiscordKafkaTopics.KAFKA_TOPIC_DISCORD_MESSAGE_FALLTHROUGH, JSON.stringify(message))
-    }
-    if (message instanceof Presence) {
-        publish(DiscordKafkaTopics.KAFKA_TOPIC_DISCORD_PRESENCE_UPDATE, JSON.stringify(message))
-        return
-    }
+export const ingestMessage = (message: ValidTypes) => {
+    publish(TwitchKafkaTopics.KAFKA_TOPIC_TWITCH_MESSAGE_CREATE, JSON.stringify(message))
 }
 
 const publish = (topic: string, message: string) => {
@@ -39,10 +20,10 @@ const publish = (topic: string, message: string) => {
     producer.on("ready", () => client.refreshMetadata(
         [topic], (err) => {
             if (err) {
+
                 logger.error(err)
                 return
             }
-
 
             producer.send([
                 {

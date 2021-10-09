@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/andas-tech/twitch-chatbot#readme",
   "dependencies": {
+    "@andas/streaming-events": "github:andas-tech/streaming-event-streaming",
     "@tsconfig/node16": "^1.0.2",
     "@twurple/auth": "^5.0.4",
     "@twurple/chat": "^5.0.4",
