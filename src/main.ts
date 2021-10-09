@@ -1,7 +1,8 @@
 import * as dotenv from "dotenv"
 import {createLogger} from "./commons/Logger";
-import {TwitchClientFactory} from "./client";
+import {TwitchClientFactory} from "./TwitchClientFactory";
 import {MessageEvents} from "./events/MessageEvents";
+import {EventSubListener, ReverseProxyAdapter} from "@twurple/eventsub";
 
 dotenv.config() // Read .env file into Environment Variables (process.env...)
 
@@ -18,6 +19,16 @@ const main = () => {
     }).catch((err) => logger.error(err))
 
     const apiClient = TwitchClientFactory.getApiClient()
+    const eventSubAdapter = new ReverseProxyAdapter({
+        hostName: process.env.HOST as unknown as string,
+        port: process.env.PORT as unknown as number,
+        pathPrefix: "/twitch/eventsub/"
+    })
+    const eventSubListener = new EventSubListener({
+        apiClient,
+        adapter: eventSubAdapter,
+        secret: process.env.TWITCH_EVENTSUB_SECRET as string,
+    })
 }
 
 main()
