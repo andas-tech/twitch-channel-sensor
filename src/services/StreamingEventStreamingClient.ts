@@ -7,7 +7,7 @@ import {PrivateMessage} from "@twurple/chat";
 
 
 const logger = createLogger("StreamingEventStreamingClient")
-const kafkaHost = process.env.KAFKA_HOST
+const kafkaHost = process.env.KAFKA_HOST as unknown as string
 
 type ValidTypes =
     | PrivateMessage
