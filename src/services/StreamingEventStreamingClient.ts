@@ -1,17 +1,24 @@
 import {createLogger} from "../commons/Logger";
 import {KafkaClient, Producer} from "kafka-node";
-import {TwitchPrivateMessage} from "@twurple/chat/lib/commands/TwitchPrivateMessage";
 import {TwitchKafkaTopics} from "@andas/streaming-events/dist/Twitch";
+import {EventSubChannelFollowEvent} from "@twurple/eventsub";
+import {PrivateMessage} from "@twurple/chat";
 
 
 
 const logger = createLogger("StreamingEventStreamingClient")
 const kafkaHost = process.env.KAFKA_HOST
 
-type ValidTypes = TwitchPrivateMessage
+type ValidTypes =
+    | PrivateMessage
+    | EventSubChannelFollowEvent
 
 export const ingestMessage = (message: ValidTypes) => {
-    publish(TwitchKafkaTopics.KAFKA_TOPIC_TWITCH_MESSAGE_CREATE, JSON.stringify(message))
+    if (message instanceof PrivateMessage) {
+        publish(TwitchKafkaTopics.KAFKA_TOPIC_TWITCH_MESSAGE_CREATE, JSON.stringify(message))
+    } else if (message instanceof EventSubChannelFollowEvent) {
+        publish(TwitchKafkaTopics.KAFKA_TOPIC_TWITCH_FOLLOW_CREATE, JSON.stringify(message))
+    }
 }
 
 const publish = (topic: string, message: string) => {

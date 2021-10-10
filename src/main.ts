@@ -3,6 +3,7 @@ import {createLogger} from "./commons/Logger";
 import {TwitchClientFactory} from "./TwitchClientFactory";
 import {MessageEvents} from "./events/MessageEvents";
 import {EventSubListener, ReverseProxyAdapter} from "@twurple/eventsub";
+import {FollowEvents} from "./events/FollowEvents";
 
 dotenv.config() // Read .env file into Environment Variables (process.env...)
 
@@ -28,6 +29,15 @@ const main = () => {
         apiClient,
         adapter: eventSubAdapter,
         secret: process.env.TWITCH_EVENTSUB_SECRET as string,
+    })
+
+    eventSubListener.listen().then(() => {
+        const channelList = TwitchClientFactory.getChannelList()
+        apiClient.users.getUsersByNames(channelList).then((broadcasters) => {
+            broadcasters.forEach((broadcaster) => {
+                FollowEvents.register(eventSubListener, broadcaster.id)
+            })
+        })
     })
 }
 

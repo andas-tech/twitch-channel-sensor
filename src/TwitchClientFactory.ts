@@ -1,5 +1,5 @@
 import {ChatClient} from "@twurple/chat";
-import {RefreshingAuthProvider} from "@twurple/auth";
+import {ClientCredentialsAuthProvider, RefreshingAuthProvider} from "@twurple/auth";
 import {ApiClient} from "@twurple/api";
 
 export class TwitchClientFactory {
@@ -16,13 +16,13 @@ export class TwitchClientFactory {
         return TwitchClientFactory._botClient;
     }
 
-    private static getChannelList(): string[] {
+    public static getChannelList(): string[] {
         const channelList = process.env.CHANNEL_LIST as string
         return channelList.split(',') || []
     }
 
     private static createBotClient(): ChatClient {
-        const authProvider = TwitchClientFactory.getAuthProvider();
+        const authProvider = TwitchClientFactory.getRefreshingAuthProvider();
         const channels = TwitchClientFactory.getChannelList()
         if (channels.length === 0) {
             throw Error('no channels defined')
@@ -42,13 +42,20 @@ export class TwitchClientFactory {
     }
 
     private static createApiClient(): ApiClient {
-        const authProvider = TwitchClientFactory.getAuthProvider()
+        const clientId = process.env.TWITCH_CLIENT_ID as string
+        const clientSecret = process.env.TWITCH_CLIENT_SECRET as string
+
+        const authProvider = new ClientCredentialsAuthProvider(
+            clientId,
+            clientSecret,
+        )
+
         return new ApiClient({
             authProvider
         })
     }
 
-    private static getAuthProvider() {
+    private static getRefreshingAuthProvider() {
         if (!TwitchClientFactory._authProvider) {
             TwitchClientFactory._authProvider = TwitchClientFactory.createRefreshingAuthProvider()
         }
